@@ -22,6 +22,7 @@ export default {
   margin: 0;
   border: none;
   text-decoration: none;
+  font-family: "Montserrat", sans-serif;
 }
 html,
 body {
@@ -30,7 +31,6 @@ body {
   background: #0a1f38;
 }
 #app {
-  font-family: "Montserrat", sans-serif;
   background: var(--dark);
 
   // colors
@@ -118,9 +118,12 @@ body {
     font-weight: 700;
     line-height: 28px;
     overflow: hidden;
-    color: var(--white);
+    color: var(--green-light);
     text-overflow: ellipsis;
     white-space: nowrap;
+    &:hover {
+      color: var(--green-dark);
+    }
   }
 }
 </style>

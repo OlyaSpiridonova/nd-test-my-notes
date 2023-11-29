@@ -5,4 +5,7 @@ export default {
   userEmail(state) {
     return state.userEmail;
   },
+  isAuthenticated(state) {
+    return !!state.userId;
+  },
 };

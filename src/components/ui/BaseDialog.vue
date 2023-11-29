@@ -3,7 +3,7 @@
     <div v-if="show" @click="tryClose" class="backdrop"></div>
     <transition name="dialog">
       <dialog open v-if="show">
-        <base-button mode="circle" @click="tryClose">
+        <base-button class="close_btn" mode="circle" @click="tryClose">
           <img src="../../assets/close.svg" alt="close" />
         </base-button>
         <section>
@@ -85,6 +85,11 @@ header {
   display: flex;
   justify-content: flex-end;
   padding: 20px 20px 0 0;
+}
+
+.close_btn {
+  top: 20px;
+  right: 20px;
 }
 
 .dialog-enter-from,

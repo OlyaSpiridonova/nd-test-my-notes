@@ -59,7 +59,7 @@ export default {
 
       try {
         await this.$store.dispatch("auth", actionPayload);
-        this.$router.replace("/");
+        this.$router.replace("/notes");
       } catch (error) {
         this.error = error.message || "Failed to authenticate, try later...";
       }

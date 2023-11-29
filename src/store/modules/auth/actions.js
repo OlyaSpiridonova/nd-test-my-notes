@@ -14,8 +14,6 @@ export default {
     });
     const responseData = await response.json();
 
-    console.log(responseData);
-
     if (!response.ok) {
       const error = new Error(
         responseData.message || "Failed to authentication"
@@ -53,6 +51,13 @@ export default {
     context.commit("setUser", {
       userId: responseData.id,
       userEmail: responseData.email,
+    });
+  },
+
+  logout(context) {
+    context.commit("setUser", {
+      userId: null,
+      userEmail: null,
     });
   },
 };
