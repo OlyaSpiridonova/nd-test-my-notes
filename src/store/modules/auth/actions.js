@@ -1,9 +1,7 @@
 export default {
   async auth(context, payload) {
     context.commit("setError", null);
-
-    const url = context.rootGetters.baseUrl;
-    const response = await fetch(url + "auth", {
+    const response = await fetch(process.env.VUE_APP_URL + "auth", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -32,8 +30,7 @@ export default {
 
   async registration(context, payload) {
     context.commit("setError", null);
-    const url = context.rootGetters.baseUrl;
-    const response = await fetch(url + "reg", {
+    const response = await fetch(process.env.VUE_APP_URL + "reg", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

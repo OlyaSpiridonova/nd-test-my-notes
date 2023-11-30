@@ -1,10 +1,10 @@
 export default {
   async createNote(context, payload) {
     context.commit("setNoteError", null);
-    const url = context.rootGetters.baseUrl;
+
     const userId = context.rootGetters.userId;
 
-    const response = await fetch(url + "notes", {
+    const response = await fetch(process.env.VUE_APP_URL + "notes", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -26,8 +26,7 @@ export default {
   },
 
   async getNotes(context) {
-    const url = context.rootGetters.baseUrl;
-    const response = await fetch(url + "notes");
+    const response = await fetch(process.env.VUE_APP_URL + "notes");
     const responseData = await response.json();
     if (!response.ok) {
       const error = new Error(responseData.message || "Failed to Fetch!");
@@ -37,10 +36,9 @@ export default {
   },
 
   async deleteNote(context, payload) {
-    const url = context.rootGetters.baseUrl;
     context.commit("deleteNotes", payload);
 
-    const response = await fetch(`${url}notes/${payload}`, {
+    const response = await fetch(`${process.env.VUE_APP_URL}notes/${payload}`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
