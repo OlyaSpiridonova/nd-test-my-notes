@@ -11,6 +11,9 @@ export default {
   components: {
     MainHeader,
   },
+  created() {
+    this.$store.dispatch("tryLogin");
+  },
 };
 </script>
 
@@ -23,6 +26,7 @@ export default {
   border: none;
   text-decoration: none;
   font-family: "Montserrat", sans-serif;
+  list-style-type: none;
 }
 html,
 body {
@@ -43,6 +47,7 @@ body {
   --green: #a5bb0c;
   --green-light: #b1c909;
   --white: #ffffff;
+  --error: #ff7461;
 
   // border-radius
   --border-radius: 32px;
@@ -108,6 +113,9 @@ body {
     color: var(--gray);
     text-overflow: ellipsis;
     white-space: nowrap;
+    &-red {
+      color: var(--error);
+    }
     @media (max-width: 759px) {
       font-size: 14px;
     }

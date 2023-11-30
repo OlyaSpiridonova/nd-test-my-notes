@@ -3,4 +3,11 @@ export default {
     state.userId = payload.userId;
     state.userEmail = payload.userEmail;
   },
+  setError(state, payload) {
+    if (Array.isArray(payload) || payload === null) {
+      state.errors = payload;
+    } else {
+      state.errors = [payload];
+    }
+  },
 };

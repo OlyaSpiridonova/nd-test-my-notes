@@ -1,8 +1,9 @@
 export default {
   async auth(context, payload) {
-    let url = "http://localhost:8080/api/auth";
+    context.commit("setError", null);
 
-    const response = await fetch(url, {
+    const url = context.rootGetters.baseUrl;
+    const response = await fetch(url + "auth", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -18,18 +19,21 @@ export default {
       const error = new Error(
         responseData.message || "Failed to authentication"
       );
+      context.commit("setError", responseData.message);
       throw error;
     }
     context.commit("setUser", {
       userId: responseData.id,
       userEmail: responseData.email,
     });
+    localStorage.setItem("localId", responseData.id);
+    localStorage.setItem("localEmail", responseData.email);
   },
 
   async registration(context, payload) {
-    let url = "http://localhost:8080/api/reg";
-
-    const response = await fetch(url, {
+    context.commit("setError", null);
+    const url = context.rootGetters.baseUrl;
+    const response = await fetch(url + "reg", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -45,6 +49,7 @@ export default {
 
     if (!response.ok) {
       const error = new Error(responseData.message || "Failed to registration");
+      context.commit("setError", responseData.message);
       throw error;
     }
 
@@ -59,5 +64,20 @@ export default {
       userId: null,
       userEmail: null,
     });
+    context.commit("setNotes", null);
+    localStorage.removeItem("localId");
+    localStorage.removeItem("localEmail");
+  },
+
+  tryLogin(context) {
+    const userId = localStorage.getItem("localId");
+    const userEmail = localStorage.getItem("localEmail");
+
+    if (userId && userEmail) {
+      context.commit("setUser", {
+        userId: userId,
+        userEmail: userEmail,
+      });
+    }
   },
 };

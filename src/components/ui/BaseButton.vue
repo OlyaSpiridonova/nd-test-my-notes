@@ -70,8 +70,6 @@ a {
 .circle {
   position: absolute;
   width: 56px;
-  // top: 20px;
-  // right: 20px;
 }
 .mobile {
   @media (max-width: 759px) {

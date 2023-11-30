@@ -19,7 +19,9 @@ export default {
     },
     logout() {
       this.$store.dispatch("logout");
-      this.$router.replace("/");
+      if (this.$route.path !== "/") {
+        this.$router.replace("/");
+      }
     },
   },
 };
@@ -40,6 +42,14 @@ export default {
   border-radius: 12px;
   background: var(--dark-middle);
   box-shadow: 0px 15px 46px -10px rgba(0, 0, 0, 0.6);
+  z-index: 100;
+  @media (max-width: 1366px) {
+    top: 90px;
+    right: 80px;
+  }
+  @media (max-width: 767px) {
+    right: 20px;
+  }
 
   &__logout {
     cursor: pointer;

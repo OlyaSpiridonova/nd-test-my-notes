@@ -1,9 +1,10 @@
 export default {
   async createNote(context, payload) {
-    let url = "http://localhost:8080/api/notes";
+    context.commit("setNoteError", null);
+    const url = context.rootGetters.baseUrl;
     const userId = context.rootGetters.userId;
 
-    const response = await fetch(url, {
+    const response = await fetch(url + "notes", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -17,15 +18,16 @@ export default {
     const responseData = await response.json();
 
     if (!response.ok) {
-      const error = new Error(
-        responseData.message || "Failed to authentication"
-      );
+      const error = new Error(responseData.message || "Failed to Fetch!");
+      context.commit("setNoteError", responseData.message);
+
       throw error;
     }
   },
 
   async getNotes(context) {
-    const response = await fetch("http://localhost:8080/api/notes");
+    const url = context.rootGetters.baseUrl;
+    const response = await fetch(url + "notes");
     const responseData = await response.json();
     if (!response.ok) {
       const error = new Error(responseData.message || "Failed to Fetch!");
@@ -35,9 +37,10 @@ export default {
   },
 
   async deleteNote(context, payload) {
+    const url = context.rootGetters.baseUrl;
     context.commit("deleteNotes", payload);
 
-    const response = await fetch(`http://localhost:8080/api/notes/${payload}`, {
+    const response = await fetch(`${url}notes/${payload}`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",

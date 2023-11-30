@@ -15,12 +15,20 @@
       <div class="login__form-control">
         <label class="text-small" for="password">Пароль</label>
         <input
+          ref="password"
           class="text-small"
           type="password"
           id="password"
           v-model.trim="password"
           placeholder="Введите пароль"
         />
+        <div
+          class="login__form-control-password"
+          :class="{ notVisible: isVisiblePassword }"
+          @click="changeVisiblePassword()"
+        >
+          <img src="../assets/onPassword.svg" alt="password" />
+        </div>
       </div>
     </form>
     <div class="login__active">
@@ -34,6 +42,15 @@
         >Войти</base-button
       >
     </div>
+    <ul v-if="loginErrors" class="login__errors">
+      <li
+        class="login__errors-item text-small-red"
+        v-for="error in loginErrors"
+        :key="error"
+      >
+        {{ error }}
+      </li>
+    </ul>
   </div>
 </template>
 
@@ -45,6 +62,7 @@ export default {
     return {
       email: "",
       password: "",
+      isVisiblePassword: false,
       isValid: true,
       isLoading: false,
       error: null,
@@ -67,6 +85,20 @@ export default {
     handleError() {
       this.error = null;
     },
+    changeVisiblePassword() {
+      if (this.$refs.password.getAttribute("type") === "password") {
+        this.$refs.password.setAttribute("type", "text");
+        this.isVisiblePassword = true;
+      } else {
+        this.$refs.password.setAttribute("type", "password");
+        this.isVisiblePassword = false;
+      }
+    },
+  },
+  computed: {
+    loginErrors() {
+      return this.$store.getters.errors;
+    },
   },
 };
 </script>
@@ -86,6 +118,7 @@ export default {
     gap: 24px;
 
     &-control {
+      position: relative;
       display: flex;
       flex-direction: column;
       gap: 8px;
@@ -96,6 +129,28 @@ export default {
         padding: 0 28px;
         height: 72px;
         border-radius: var(--border-radius-input);
+      }
+      &-password.notVisible {
+        &::after {
+          opacity: 0;
+        }
+      }
+      &-password {
+        position: absolute;
+        right: 16px;
+        top: 67px;
+        cursor: pointer;
+        &::after {
+          position: absolute;
+          content: "";
+          top: 7px;
+          right: 9px;
+          width: 23px;
+          height: 2px;
+          background: var(--green-light);
+          transform: rotate(45deg);
+          opacity: 1;
+        }
       }
     }
   }
@@ -121,6 +176,18 @@ export default {
         align-items: center;
         flex-direction: row;
       }
+    }
+  }
+
+  &__errors {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    &-item {
+      padding: 8px 20px;
+      background: rgba(255, 116, 97, 0.1);
+      border-radius: 24px;
     }
   }
 }

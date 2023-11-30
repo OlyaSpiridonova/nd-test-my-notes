@@ -58,11 +58,23 @@ export default {
 .notes {
   &__block {
     display: flex;
+    justify-content: center;
     flex-wrap: wrap;
     padding: 40px 160px;
     gap: 40px;
+    @media (max-width: 1919px) {
+      padding: 40px 80px;
+      gap: 20px;
+    }
+    @media (max-width: 1365px) {
+      padding: 40px;
+    }
+    @media (max-width: 768px) {
+      padding: 20px;
+    }
   }
   &__btn {
+    position: fixed;
     bottom: 20px;
     right: 20px;
     box-shadow: 0px 15px 46px -10px rgba(0, 0, 0, 0.6);

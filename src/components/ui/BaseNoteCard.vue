@@ -46,10 +46,19 @@ export default {
   display: flex;
   flex-direction: column;
   border-radius: 12px 50px 12px 12px;
-  width: 507px;
+  width: 506px;
   height: 100%;
   max-height: 480px;
   background: var(--green-light);
+  @media (max-width: 1919px) {
+    width: 388px;
+  }
+  @media (max-width: 1365px) {
+    width: 280px;
+  }
+  @media (max-width: 959px) {
+    width: 100%;
+  }
 
   &__title {
     position: relative;

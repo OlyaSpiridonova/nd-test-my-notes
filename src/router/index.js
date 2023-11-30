@@ -4,6 +4,7 @@ import MainPage from "@/pages/MainPage";
 import UserAuth from "@/pages/auth/UserAuth";
 import UserRegistration from "@/pages/auth/UserRegistration";
 import NotesPage from "@/pages/NotesPage";
+import NotFoundPage from "@/pages/NotFoundPage";
 import store from "@/store/index";
 
 Vue.use(VueRouter);
@@ -15,7 +16,10 @@ const routes = [
     component: MainPage,
     children: [
       { path: "login", component: UserAuth },
-      { path: "registration", component: UserRegistration },
+      {
+        path: "registration",
+        component: UserRegistration,
+      },
     ],
   },
   {
@@ -24,6 +28,7 @@ const routes = [
     component: NotesPage,
     meta: { requiresAuth: true },
   },
+  { path: "/:notFound(.*)", component: NotFoundPage },
 ];
 
 const router = new VueRouter({
@@ -34,7 +39,7 @@ const router = new VueRouter({
 
 router.beforeEach((to, _, next) => {
   if (to.meta.requiresAuth && !store.getters.isAuthenticated) {
-    next("/login");
+    next("/");
   } else {
     next();
   }

@@ -2,7 +2,13 @@
   <header class="header">
     <nav class="header__nav">
       <router-link to="/notes">
-        <img src="../../assets/logo.svg" alt="logo" class="header__logo" />
+        <picture>
+          <source
+            srcset="../../assets/logo_mob.svg"
+            media="(max-width: 767px)"
+          />
+          <img src="../../assets/logo.svg" alt="logo" class="header__logo" />
+        </picture>
       </router-link>
 
       <div v-if="isLoggedIn" class="header__user">
@@ -63,9 +69,6 @@ export default {
     padding: 20px 80px;
   }
   @media (max-width: 767px) {
-    padding: 20px 40px;
-  }
-  @media (max-width: 759px) {
     padding: 20px;
   }
 

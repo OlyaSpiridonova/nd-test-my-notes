@@ -6,6 +6,7 @@ export default {
   state() {
     return {
       notes: null,
+      noteErrors: null,
     };
   },
   getters,

@@ -6,11 +6,15 @@
         <label class="text-small" for="titleNote">Название заметки</label>
         <input
           class="text-small"
+          maxlength="100"
           type="text"
           id="titleNote"
           v-model.trim="titleNote"
           placeholder="Введите название"
         />
+        <span class="newNote__form-control-length text-small">{{
+          titleNote.length + "/100"
+        }}</span>
       </div>
       <div class="newNote__form-control">
         <label class="text-small" for="textNote">Текст заметки</label>
@@ -35,6 +39,15 @@
         >Добавить</base-button
       >
     </div>
+    <ul v-if="createNoteErrors" class="newNote__errors">
+      <li
+        class="newNote__errors-item text-small-red"
+        v-for="error in createNoteErrors"
+        :key="error"
+      >
+        {{ error }}
+      </li>
+    </ul>
   </div>
 </template>
 
@@ -44,6 +57,7 @@ export default {
     return {
       titleNote: "",
       textNote: "",
+      errors: null,
     };
   },
   emits: ["close-dialog"],
@@ -56,12 +70,16 @@ export default {
       try {
         await this.$store.dispatch("createNote", actionPayload);
         await this.$store.dispatch("getNotes");
-      } catch (error) {
-        this.error = error.message || "Failed to authenticate, try later...";
-      } finally {
         this.$refs.newNote.reset();
         this.$emit("close-dialog");
+      } catch (error) {
+        this.errors = error;
       }
+    },
+  },
+  computed: {
+    createNoteErrors() {
+      return this.$store.getters.notesErrors;
     },
   },
 };
@@ -94,7 +112,7 @@ export default {
         border-radius: var(--border-radius-input);
       }
       textarea {
-        padding: 16px;
+        padding: 28px;
         height: 316px;
         border-radius: var(--border-radius-input);
         resize: none;
@@ -134,6 +152,17 @@ export default {
         align-items: center;
         flex-direction: row;
       }
+    }
+  }
+  &__errors {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    &-item {
+      padding: 8px 20px;
+      background: rgba(255, 116, 97, 0.1);
+      border-radius: 24px;
     }
   }
 }

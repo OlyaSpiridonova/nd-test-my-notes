@@ -8,4 +8,10 @@ export default {
   isAuthenticated(state) {
     return !!state.userId;
   },
+  baseUrl(state) {
+    return state.baseUrl;
+  },
+  errors(state) {
+    return state.errors;
+  },
 };
