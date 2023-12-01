@@ -4,6 +4,7 @@ export default {
     const response = await fetch(process.env.VUE_APP_URL + "auth", {
       method: "POST",
       headers: {
+        accept: "application/json",
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
@@ -33,6 +34,7 @@ export default {
     const response = await fetch(process.env.VUE_APP_URL + "reg", {
       method: "POST",
       headers: {
+        accept: "application/json",
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
@@ -56,7 +58,17 @@ export default {
     });
   },
 
-  logout(context) {
+  async logout(context) {
+    const response = await fetch(process.env.VUE_APP_URL + "auth", {
+      method: "DELETE",
+      headers: {
+        accept: "*/*",
+      },
+    });
+    if (!response.ok) {
+      const error = new Error("Failed to logout");
+      throw error;
+    }
     context.commit("setUser", {
       userId: null,
       userEmail: null,
