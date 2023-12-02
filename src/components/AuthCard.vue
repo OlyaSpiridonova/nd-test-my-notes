@@ -1,8 +1,8 @@
 <template>
-  <div class="registration">
-    <h2 class="h2">Регистрация</h2>
-    <form @submit.prevent="submitForm" class="registration__form">
-      <div class="registration__form-control">
+  <div class="auth">
+    <h2 class="h2">{{ login ? "Вход в ваш аккаунт" : "Регистрация" }}</h2>
+    <form @submit.prevent="submitForm(submitAction)" class="auth__form">
+      <div class="auth__form-control">
         <label class="text-small" for="email">E-mail</label>
         <input
           class="text-small"
@@ -12,7 +12,7 @@
           placeholder="Введите значение"
         />
       </div>
-      <div class="registration__form-control">
+      <div class="auth__form-control">
         <label class="text-small" for="password">Пароль</label>
         <input
           ref="password"
@@ -23,14 +23,14 @@
           placeholder="Введите пароль"
         />
         <div
-          class="registration__form-control-password"
+          class="auth__form-control-password"
           :class="{ notVisible: isVisiblePassword }"
           @click="changeVisiblePassword('password')"
         >
           <img src="../assets/onPassword.svg" alt="password" />
         </div>
       </div>
-      <div class="registration__form-control">
+      <div v-if="registration" class="auth__form-control">
         <label class="text-small" for="repeatPassword">Пароль ещё раз</label>
         <input
           ref="confirmPassword"
@@ -41,7 +41,7 @@
           placeholder="Введите пароль"
         />
         <div
-          class="registration__form-control-password"
+          class="auth__form-control-password"
           :class="{ notVisible: isVisibleConfirmPassword }"
           @click="changeVisiblePassword('confirmPassword')"
         >
@@ -49,19 +49,27 @@
         </div>
       </div>
     </form>
-    <div class="registration__active">
-      <div class="registration__active-reg">
-        <span class="text-small">У вас есть аккаунт? </span>
-        <base-button link to="/login" mode="link">Войдите</base-button>
+    <div class="auth__active">
+      <div class="auth__active-reg">
+        <span class="text-small"
+          >{{ login ? "У вас нет аккаунта?" : "У вас есть аккаунт?" }}
+        </span>
+        <base-button link :to="redirection" mode="link">{{
+          login ? "Зарегистрируйтесь" : "Войдите"
+        }}</base-button>
       </div>
-      <base-button to @click="submitForm" class="text-normal" mode="mobile"
-        >Зарегистрироваться</base-button
+      <base-button
+        to
+        @click="submitForm(submitAction)"
+        class="text-normal"
+        mode="mobile"
+        >{{ login ? "Войти" : "Зарегистрироваться" }}</base-button
       >
     </div>
-    <ul v-if="RegistrationErrors" class="registration__errors">
+    <ul v-if="authErrors" class="auth__errors">
       <li
-        class="registration__errors-item text-small-red"
-        v-for="error in RegistrationErrors"
+        class="auth__errors-item text-small-red"
+        v-for="error in authErrors"
         :key="error"
       >
         {{ error }}
@@ -71,9 +79,19 @@
 </template>
 
 <script>
-import BaseButton from "./ui/BaseButton.vue";
 export default {
-  components: { BaseButton },
+  props: {
+    login: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
+    registration: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
+  },
   data() {
     return {
       email: "",
@@ -84,14 +102,23 @@ export default {
     };
   },
   methods: {
-    async submitForm() {
+    async submitForm(action) {
       const actionPayload = {
         email: this.email,
         password: this.password,
-        confirmPassword: this.confirmPassword,
       };
       try {
-        await this.$store.dispatch("registration", actionPayload);
+        if (action === "registration") {
+          await this.$store.dispatch("registration", {
+            ...actionPayload,
+            confirmPassword: this.confirmPassword,
+          });
+        }
+        await this.$store.dispatch("auth", {
+          email: this.email,
+          password: this.password,
+        });
+        await this.$store.dispatch("getAuthUser");
         this.$router.replace("/notes");
       } catch (error) {
         this.error = error.message || "Failed to authenticate, try later...";
@@ -115,7 +142,16 @@ export default {
     },
   },
   computed: {
-    RegistrationErrors() {
+    redirection() {
+      return this.$props.login ? "/registration" : "/login";
+    },
+    submitAction() {
+      if (this.$props.registration) {
+        return "registration";
+      }
+      return null;
+    },
+    authErrors() {
       return this.$store.getters.errors;
     },
   },
@@ -123,7 +159,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.registration {
+.auth {
   display: flex;
   gap: 40px;
   flex-direction: column;

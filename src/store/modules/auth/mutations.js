@@ -1,4 +1,7 @@
 export default {
+  setToken(state, payload) {
+    state.token = payload;
+  },
   setUser(state, payload) {
     state.userId = payload.userId;
     state.userEmail = payload.userEmail;

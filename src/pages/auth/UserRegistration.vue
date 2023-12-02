@@ -1,17 +1,17 @@
 <template>
   <base-dialog :show="true" @close="handleClose">
-    <registration-card />
+    <auth-card registration @close="handleClose" />
   </base-dialog>
 </template>
 
 <script>
-import RegistrationCard from "@/components/RegistrationCard.vue";
+import AuthCard from "@/components/AuthCard.vue";
 export default {
   data() {
     return {};
   },
   components: {
-    RegistrationCard,
+    AuthCard,
   },
   methods: {
     handleClose() {

@@ -1,5 +1,6 @@
 export default {
   async createNote(context, payload) {
+    const token = context.rootGetters.token;
     context.commit("setNoteError", null);
     const userId = context.rootGetters.userId;
 
@@ -8,6 +9,7 @@ export default {
       headers: {
         accept: "application/json",
         "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({
         id: userId,
@@ -25,9 +27,11 @@ export default {
     }
   },
   async getNotes(context) {
+    const token = context.rootGetters.token;
     const response = await fetch(process.env.VUE_APP_URL + "notes", {
       headers: {
         Accept: "application/json",
+        Authorization: `Bearer ${token}`,
       },
     });
 
@@ -40,11 +44,13 @@ export default {
   },
 
   async deleteNote(context, payload) {
+    const token = context.rootGetters.token;
     context.commit("deleteNotes", payload);
     const response = await fetch(`${process.env.VUE_APP_URL}notes/${payload}`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
     });
     const responseData = await response.json();
